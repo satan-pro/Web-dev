@@ -1,0 +1,16 @@
+body{
+    background-color: rgba(213, 219, 219, 0.719);
+}
+.input{
+    border-radius : 0;
+}
+.input:nth-child(1){
+    border-radius : 5px 5px 0 0;
+}
+.input:nth-last-child(1){
+    border-radius: 0 0 5px 5px;
+}
+.input:focus{
+    box-shadow: none;
+    border-width: 2px;
+}
