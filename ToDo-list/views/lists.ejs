@@ -1,0 +1,27 @@
+<%- include("header") -%>
+<body>
+    <h1>Today's Tasks</h1>
+    <h3><%= listName %></h3>
+    <div class="container">
+        <ul class="tasks">
+            <%for(let i=0; i<notes.length; i++){%>
+                <li><input type="checkbox"> <p><%= notes[i] %></p></li>
+            <%}%>
+        </ul>
+        <form action="/" method="post" class="input-form">
+            <input type="text" placeholder="Add Note" name="newNote">
+            <button type="submit" name="submit" value="<%= listName %>">Add</button>
+        </form>
+    </div>
+    <form action="/redirect" method="post">
+        <button type="submit" name="submit" value="<%= name %>">Go to <%=name%> List</button>
+    </form>
+    
+    <!-- <script>
+        function click(){
+            window.location='/work';
+        }
+    </script> -->
+</body>
+<%- include("footer") -%>
+</html>
