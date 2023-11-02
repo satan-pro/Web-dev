@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require('mongoose');
 const app = express();
 
 app.use(bodyParser.urlencoded({extended:true}));
@@ -7,6 +8,24 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 
 app.set('view engine', 'ejs');
+
+mongoose.connect('mongodb://127.0.0.1:27017/todolistDB');
+
+const itemSchema = new mongoose.Schema({
+    name:String
+});
+
+const Item = mongoose.model("Item", itemSchema);
+
+let note1 = new Item({name:"Buy Food"});
+let note2 = new Item({name:"cook"});
+let note3 = new Item({name: "eat"});
+
+let notes = [note1, note2, note3];
+
+Item.insertMany(notes).then(()=>{
+    console.log("Successfully added all itmes to DB");
+});
 
 let newNotes=["Buy food", "cook", "eat"];
 let workNotes=[];
