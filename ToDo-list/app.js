@@ -15,17 +15,16 @@ const itemSchema = new mongoose.Schema({
     name:String
 });
 
-const Item = mongoose.model("Item", itemSchema);
+const dailyNote = mongoose.model("dailyNote", itemSchema);
+const workNote = mongoose.model('workNote', itemSchema);
 
-let note1 = new Item({name:"Buy Food"});
-let note2 = new Item({name:"cook"});
-let note3 = new Item({name: "eat"});
+let note1 = new dailyNote({name:"Buy Food"});
+let note2 = new dailyNote({name:"cook"});
+let note3 = new dailyNote({name: "eat"});
 
-let notes = [note1, note2, note3];
+let defaultNotes = [note1, note2, note3];
 
-Item.insertMany(notes).then(()=>{
-    console.log("Successfully added all itmes to DB");
-});
+
 
 let newNotes=["Buy food", "cook", "eat"];
 let workNotes=[];
@@ -37,25 +36,44 @@ app.get("/", function(req, res){
         month: 'long'
     };
     let currentDay = today.toLocaleDateString('en-US', options);
-    res.render('lists',{listName: currentDay, notes: newNotes, name:"Work"});
+
+    dailyNote.find({}).exec().then(items=>{
+        if(items.length===0)
+        {
+            dailyNote.insertMany(defaultNotes).then(()=>{
+                console.log("Successfully added default Notes to DB");
+            });
+            res.redirect('/');
+        }
+        else
+        {
+            res.render('lists',{listName: currentDay, notes: items , name:"Work"});
+        }
+    });
+    
 }); 
 
 app.post("/", function(req, res){
    let item = req.body.newNote;
    if(req.body.submit==="Work List")
    {
-    workNotes.push(item);
+    var newWorkNote = new workNote({name:item});
+    newWorkNote.save();
     res.redirect("/work");
    }
    else{
-    newNotes.push(item);
+    var newDailyNote = new dailyNote({name:item});
+    newDailyNote.save();
     res.redirect("/");
    }
   
 });
 
 app.get("/work", function(req, res){
-    res.render('lists', {listName:"Work List", notes:workNotes , name:"Home"});
+    workNote.find({}).then(notes=>{
+        res.render('lists', {listName:"Work List", notes:notes , name:"Home"});
+    })
+    
 });
 
 app.post("/work", function(req, res){

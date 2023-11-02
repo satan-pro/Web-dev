@@ -5,7 +5,7 @@
     <div class="container">
         <ul class="tasks">
             <%for(let i=0; i<notes.length; i++){%>
-                <li><input type="checkbox"> <p><%= notes[i] %></p></li>
+                <li><input type="checkbox"> <p><%= notes[i].name %></p></li>
             <%}%>
         </ul>
         <form action="/" method="post" class="input-form">
