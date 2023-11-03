@@ -5,7 +5,10 @@
     <div class="container">
         <ul class="tasks">
             <%for(let i=0; i<notes.length; i++){%>
-                <li><input type="checkbox"> <p><%= notes[i].name %></p></li>
+                <% let note = notes[i] %>
+                <form action="/delete" method="post" id="check-form">
+                <li><input type="checkbox" name="checkbox" value = "<%= note._id %>" onchange=this.form.submit()> <p><%= note.name %></p></li>
+                </form>
             <%}%>
         </ul>
         <form action="/" method="post" class="input-form">
@@ -13,15 +16,14 @@
             <button type="submit" name="submit" value="<%= listName %>">Add</button>
         </form>
     </div>
-    <form action="/redirect" method="post">
-        <button type="submit" name="submit" value="<%= name %>">Go to <%=name%> List</button>
-    </form>
     
     <!-- <script>
-        function click(){
-            window.location='/work';
-        }
+       function submitForm()
+       {
+        document.getElementById('check-form').submit();
+       }
     </script> -->
+
 </body>
 <%- include("footer") -%>
 </html>
